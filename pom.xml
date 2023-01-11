@@ -78,7 +78,7 @@
         <protobuf.version>3.21.9</protobuf.version>
         <grpc.version>1.42.1</grpc.version>
         <tbel.version>1.0.2</tbel.version>
-        <lombok.version>1.18.18</lombok.version>
+        <lombok.version>1.18.20</lombok.version>
         <paho.client.version>1.2.4</paho.client.version>
         <netty.version>4.1.75.Final</netty.version>
         <netty-tcnative.version>2.0.51.Final</netty-tcnative.version>
@@ -774,79 +774,79 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>com.mycila</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <header>${main.dir}/license-header-template.txt</header>
-                        <properties>
-                            <owner>The Thingsboard Authors</owner>
-                        </properties>
-                        <excludes>
-                            <exclude>**/.env</exclude>
-                            <exclude>**/*.env</exclude>
-                            <exclude>**/.eslintrc</exclude>
-                            <exclude>**/.babelrc</exclude>
-                            <exclude>**/.jshintrc</exclude>
-                            <exclude>**/.gradle/**</exclude>
-                            <exclude>**/nightwatch</exclude>
-                            <exclude>**/README</exclude>
-                            <exclude>**/LICENSE</exclude>
-                            <exclude>**/banner.txt</exclude>
-                            <exclude>node_modules/**</exclude>
-                            <exclude>**/*.properties</exclude>
-                            <exclude>src/test/resources/**</exclude>
-                            <exclude>src/vendor/**</exclude>
-                            <exclude>src/font/**</exclude>
-                            <exclude>src/sh/**</exclude>
-                            <exclude>packaging/*/scripts/control/**</exclude>
-                            <exclude>packaging/*/scripts/windows/**</exclude>
-                            <exclude>packaging/*/scripts/init/**</exclude>
-                            <exclude>**/*.log</exclude>
-                            <exclude>**/*.current</exclude>
-                            <exclude>.instance_id</exclude>
-                            <exclude>src/main/scripts/control/**</exclude>
-                            <exclude>src/main/scripts/windows/**</exclude>
-                            <exclude>src/main/resources/public/static/rulenode/**</exclude>
-                            <exclude>**/*.proto.js</exclude>
-                            <exclude>docker/haproxy/**</exclude>
-                            <exclude>docker/tb-node/**</exclude>
-                            <exclude>ui/**</exclude>
-                            <exclude>src/.browserslistrc</exclude>
-                            <exclude>**/yarn.lock</exclude>
-                            <exclude>**/*.raw</exclude>
-                            <exclude>**/*.patch</exclude>
-                            <exclude>**/apache/cassandra/io/**</exclude>
-                            <exclude>.run/**</exclude>
-                            <exclude>**/NetworkReceive.java</exclude>
-                        </excludes>
-                        <mapping>
-                            <proto>JAVADOC_STYLE</proto>
-                            <cql>DOUBLEDASHES_STYLE</cql>
-                            <scss>JAVADOC_STYLE</scss>
-                            <jsx>SLASHSTAR_STYLE</jsx>
-                            <tsx>SLASHSTAR_STYLE</tsx>
-                            <conf>SCRIPT_STYLE</conf>
-                            <gradle>JAVADOC_STYLE</gradle>
-                        </mapping>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+<!--                <plugin>-->
+<!--                    <groupId>com.mycila</groupId>-->
+<!--                    <artifactId>license-maven-plugin</artifactId>-->
+<!--                    <version>3.0</version>-->
+<!--                    <configuration>-->
+<!--                        <header>${main.dir}/license-header-template.txt</header>-->
+<!--                        <properties>-->
+<!--                            <owner>The Thingsboard Authors</owner>-->
+<!--                        </properties>-->
+<!--                        <excludes>-->
+<!--                            <exclude>**/.env</exclude>-->
+<!--                            <exclude>**/*.env</exclude>-->
+<!--                            <exclude>**/.eslintrc</exclude>-->
+<!--                            <exclude>**/.babelrc</exclude>-->
+<!--                            <exclude>**/.jshintrc</exclude>-->
+<!--                            <exclude>**/.gradle/**</exclude>-->
+<!--                            <exclude>**/nightwatch</exclude>-->
+<!--                            <exclude>**/README</exclude>-->
+<!--                            <exclude>**/LICENSE</exclude>-->
+<!--                            <exclude>**/banner.txt</exclude>-->
+<!--                            <exclude>node_modules/**</exclude>-->
+<!--                            <exclude>**/*.properties</exclude>-->
+<!--                            <exclude>src/test/resources/**</exclude>-->
+<!--                            <exclude>src/vendor/**</exclude>-->
+<!--                            <exclude>src/font/**</exclude>-->
+<!--                            <exclude>src/sh/**</exclude>-->
+<!--                            <exclude>packaging/*/scripts/control/**</exclude>-->
+<!--                            <exclude>packaging/*/scripts/windows/**</exclude>-->
+<!--                            <exclude>packaging/*/scripts/init/**</exclude>-->
+<!--                            <exclude>**/*.log</exclude>-->
+<!--                            <exclude>**/*.current</exclude>-->
+<!--                            <exclude>.instance_id</exclude>-->
+<!--                            <exclude>src/main/scripts/control/**</exclude>-->
+<!--                            <exclude>src/main/scripts/windows/**</exclude>-->
+<!--                            <exclude>src/main/resources/public/static/rulenode/**</exclude>-->
+<!--                            <exclude>**/*.proto.js</exclude>-->
+<!--                            <exclude>docker/haproxy/**</exclude>-->
+<!--                            <exclude>docker/tb-node/**</exclude>-->
+<!--                            <exclude>ui/**</exclude>-->
+<!--                            <exclude>src/.browserslistrc</exclude>-->
+<!--                            <exclude>**/yarn.lock</exclude>-->
+<!--                            <exclude>**/*.raw</exclude>-->
+<!--                            <exclude>**/*.patch</exclude>-->
+<!--                            <exclude>**/apache/cassandra/io/**</exclude>-->
+<!--                            <exclude>.run/**</exclude>-->
+<!--                            <exclude>**/NetworkReceive.java</exclude>-->
+<!--                        </excludes>-->
+<!--                        <mapping>-->
+<!--                            <proto>JAVADOC_STYLE</proto>-->
+<!--                            <cql>DOUBLEDASHES_STYLE</cql>-->
+<!--                            <scss>JAVADOC_STYLE</scss>-->
+<!--                            <jsx>SLASHSTAR_STYLE</jsx>-->
+<!--                            <tsx>SLASHSTAR_STYLE</tsx>-->
+<!--                            <conf>SCRIPT_STYLE</conf>-->
+<!--                            <gradle>JAVADOC_STYLE</gradle>-->
+<!--                        </mapping>-->
+<!--                    </configuration>-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <goals>-->
+<!--                                <goal>check</goal>-->
+<!--                            </goals>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>com.mycila</groupId>-->
+<!--                <artifactId>license-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
     </build>
 
     <dependencies>

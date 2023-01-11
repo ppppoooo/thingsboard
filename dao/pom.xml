@@ -233,6 +233,18 @@
             <groupId>org.eclipse.leshan</groupId>
             <artifactId>leshan-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.iotdb</groupId>
+            <artifactId>iotdb-session</artifactId>
+            <version>0.13.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.iotdb</groupId>
+            <artifactId>iotdb-server</artifactId>
+            <version>0.13.2</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

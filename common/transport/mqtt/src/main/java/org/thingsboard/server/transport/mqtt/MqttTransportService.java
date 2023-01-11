@@ -90,7 +90,8 @@ public class MqttTransportService implements TbTransportService {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new MqttTransportServerInitializer(context, false))
                 .childOption(ChannelOption.SO_KEEPALIVE, keepAlive);
-
+        log.info("Starting MQTT host={}",host);
+        log.info("Starting MQTT port={}",port);
         serverChannel = b.bind(host, port).sync().channel();
         if (sslEnabled) {
             b = new ServerBootstrap();
