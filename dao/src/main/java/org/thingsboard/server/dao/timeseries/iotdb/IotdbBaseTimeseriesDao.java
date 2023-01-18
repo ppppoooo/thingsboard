@@ -42,7 +42,7 @@ public class IotdbBaseTimeseriesDao {
                 .user(user)
                 .password(pw)
                 .connectionTimeoutInMs(3000)
-                .fetchSize(8)
+                .fetchSize(50)
                 .maxSize(100)
                 .build();
     }

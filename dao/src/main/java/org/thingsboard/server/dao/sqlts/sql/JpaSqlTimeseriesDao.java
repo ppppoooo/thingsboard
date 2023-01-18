@@ -43,6 +43,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,6 +96,16 @@ public class JpaSqlTimeseriesDao extends AbstractChunkedAggregationTimeseriesDao
         entity.setJsonValue(tsKvEntry.getJsonValue().orElse(null));
         log.trace("Saving entity: {}", entity);
         return Futures.transform(tsQueue.add(entity), v -> dataPointDays, MoreExecutors.directExecutor());
+    }
+
+    @Override
+    public ListenableFuture<Integer> saveAll(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl){
+        return Futures.immediateFuture(0);
+    }
+
+    @Override
+    public boolean hasSaveAll(){
+        return false;
     }
 
     @Override

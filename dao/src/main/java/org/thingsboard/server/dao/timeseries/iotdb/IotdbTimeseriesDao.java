@@ -11,6 +11,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.apache.iotdb.tsfile.read.common.Field;
 import org.apache.iotdb.tsfile.read.common.RowRecord;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.thingsboard.server.common.data.StringUtils;
 import org.thingsboard.server.common.data.id.EntityId;
 import org.thingsboard.server.common.data.id.TenantId;
@@ -171,6 +172,42 @@ public class IotdbTimeseriesDao extends IotdbBaseTimeseriesDao implements Aggreg
             e.printStackTrace();
         }
         return Futures.immediateFuture(1);
+    }
+
+    @Override
+    public ListenableFuture<Integer> saveAll(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl) {
+        if (CollectionUtils.isEmpty(tsKvEntries)) {
+            return Futures.immediateFuture(0);
+        }
+
+        List<String> measurements = Lists.newArrayList();
+        List<TSDataType> types = Lists.newArrayList();
+        List<Object> values = Lists.newArrayList();
+
+        tsKvEntries.stream().filter(t->t!=null).forEach(tsKvEntry -> {
+            measurements.add(tsKvEntry.getKey());
+            types.add(getType(tsKvEntry));
+            values.add(tsKvEntry.getValue());
+        });
+
+        if (CollectionUtils.isEmpty(measurements) || CollectionUtils.isEmpty(types) || CollectionUtils.isEmpty(values)) {
+            return Futures.immediateFuture(0);
+        }
+        log.info("save all");
+        try {
+            myIotdbSessionPool.insertRecord("root.thingsboard." + entityId.getId(), tsKvEntries.get(0).getTs()
+                    , Lists.newArrayList(measurements)
+                    , Lists.newArrayList(types)
+                    , Lists.newArrayList(values));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Futures.immediateFuture(1);
+    }
+
+    @Override
+    public boolean hasSaveAll(){
+        return true;
     }
 
     private TSDataType getType(TsKvEntry tsKvEntry) {

@@ -21,7 +21,7 @@ iotdb:
 
 server:
   # Server bind address
-  address: "${HTTP_BIND_ADDRESS:172.20.31.33}"
+  address: "${HTTP_BIND_ADDRESS:127.0.0.1}"
   # Server bind port
   port: "${HTTP_BIND_PORT:8088}"
   # Server forward headers strategy

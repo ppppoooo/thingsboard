@@ -24,6 +24,8 @@ import org.thingsboard.server.common.msg.TbActorStopReason;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -129,27 +131,33 @@ public final class TbActorMailbox implements TbActorCtx {
         }
     }
 
+    ExecutorService service = Executors.newFixedThreadPool(100);
+
     private void processMailbox() {
         boolean noMoreElements = false;
         for (int i = 0; i < settings.getActorThroughput(); i++) {
+            TbActorMsg processMsg;
             TbActorMsg msg = highPriorityMsgs.poll();
             if (msg == null) {
                 msg = normalPriorityMsgs.poll();
             }
             if (msg != null) {
-                try {
-                    log.debug("[{}] Going to process message: {}", selfId, msg);
-                    actor.process(msg);
-                } catch (TbRuleNodeUpdateException updateException) {
-                    stopReason = TbActorStopReason.INIT_FAILED;
-                    destroy();
-                } catch (Throwable t) {
-                    log.debug("[{}] Failed to process message: {}", selfId, msg, t);
-                    ProcessFailureStrategy strategy = actor.onProcessFailure(t);
-                    if (strategy.isStop()) {
-                        system.stop(selfId);
+                processMsg = msg;
+                service.submit(()-> {
+                    try {
+                        log.debug("[{}] Going to process message: {}", selfId, processMsg);
+                        actor.process(processMsg);
+                    } catch (TbRuleNodeUpdateException updateException) {
+                        stopReason = TbActorStopReason.INIT_FAILED;
+                        destroy();
+                    } catch (Throwable t) {
+                        log.debug("[{}] Failed to process message: {}", selfId, processMsg, t);
+                        ProcessFailureStrategy strategy = actor.onProcessFailure(t);
+                        if (strategy.isStop()) {
+                            system.stop(selfId);
+                        }
                     }
-                }
+                });
             } else {
                 noMoreElements = true;
                 break;

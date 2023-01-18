@@ -177,14 +177,18 @@ public class BaseTimeseriesService implements TimeseriesService {
     private ListenableFuture<Integer> doSave(TenantId tenantId, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl, boolean saveLatest) {
         int inserts = saveLatest ? INSERTS_PER_ENTRY : INSERTS_PER_ENTRY_WITHOUT_LATEST;
         List<ListenableFuture<Integer>> futures = Lists.newArrayListWithExpectedSize(tsKvEntries.size() * inserts);
-        for (TsKvEntry tsKvEntry : tsKvEntries) {
-            if (tsKvEntry == null) {
-                throw new IncorrectParameterException("Key value entry can't be null");
-            }
-            if (saveLatest) {
-                saveAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, ttl);
-            } else {
-                saveWithoutLatestAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, ttl);
+        if(hasSaveAll()){
+            saveAllWithoutLatestAndRegisterFutures(tenantId, futures, entityId, tsKvEntries, ttl);
+        }else {
+            for (TsKvEntry tsKvEntry : tsKvEntries) {
+                if (tsKvEntry == null) {
+                    throw new IncorrectParameterException("Key value entry can't be null");
+                }
+                if (saveLatest) {
+                    saveAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, ttl);
+                } else {
+                    saveWithoutLatestAndRegisterFutures(tenantId, futures, entityId, tsKvEntry, ttl);
+                }
             }
         }
         return Futures.transform(Futures.allAsList(futures), SUM_ALL_INTEGERS, MoreExecutors.directExecutor());
@@ -211,12 +215,29 @@ public class BaseTimeseriesService implements TimeseriesService {
         doSaveAndRegisterFuturesFor(tenantId, futures, entityId, tsKvEntry, ttl);
     }
 
+    private void saveAllWithoutLatestAndRegisterFutures(TenantId tenantId, List<ListenableFuture<Integer>> futures, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl) {
+        doSaveAllAndRegisterFuturesFor(tenantId, futures, entityId, tsKvEntries, ttl);
+    }
+
     private void doSaveAndRegisterFuturesFor(TenantId tenantId, List<ListenableFuture<Integer>> futures, EntityId entityId, TsKvEntry tsKvEntry, long ttl) {
         if (entityId.getEntityType().equals(EntityType.ENTITY_VIEW)) {
             throw new IncorrectParameterException("Telemetry data can't be stored for entity view. Read only");
         }
         futures.add(timeseriesDao.savePartition(tenantId, entityId, tsKvEntry.getTs(), tsKvEntry.getKey()));
         futures.add(timeseriesDao.save(tenantId, entityId, tsKvEntry, ttl));
+    }
+
+    private void doSaveAllAndRegisterFuturesFor(TenantId tenantId, List<ListenableFuture<Integer>> futures, EntityId entityId, List<TsKvEntry> tsKvEntries, long ttl) {
+        if (entityId.getEntityType().equals(EntityType.ENTITY_VIEW)) {
+            throw new IncorrectParameterException("Telemetry data can't be stored for entity view. Read only");
+        }
+        //todo
+//        futures.add(timeseriesDao.savePartition(tenantId, entityId, tsKvEntry.getTs(), tsKvEntry.getKey()));
+        futures.add(timeseriesDao.saveAll(tenantId, entityId, tsKvEntries, ttl));
+    }
+
+    private boolean hasSaveAll(){
+        return timeseriesDao.hasSaveAll();
     }
 
     private List<ReadTsKvQuery> updateQueriesForEntityView(EntityView entityView, List<ReadTsKvQuery> queries) {
